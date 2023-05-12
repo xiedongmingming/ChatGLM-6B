@@ -1,42 +1,43 @@
-# ChatGLM-6B
+# CHATGLM-6B
 
 <p align="center">
-   🌐 <a href="https://chatglm.cn/blog" target="_blank">Blog</a> • 🤗 <a href="https://huggingface.co/THUDM/chatglm-6b" target="_blank">HF Repo</a> • 🐦 <a href="https://twitter.com/thukeg" target="_blank">Twitter</a> • 📃 <a href="https://arxiv.org/abs/2103.10360" target="_blank">[GLM@ACL 22]</a> <a href="https://github.com/THUDM/GLM" target="_blank">[GitHub]</a> • 📃 <a href="https://arxiv.org/abs/2210.02414" target="_blank">[GLM-130B@ICLR 23]</a> <a href="https://github.com/THUDM/GLM-130B" target="_blank">[GitHub]</a> <br>
+   🌐 <a href="https://chatglm.cn/blog" target="_blank">BLOG</a> • 🤗 <a href="https://huggingface.co/THUDM/chatglm-6b" target="_blank">HF REPO</a> • 🐦 <a href="https://twitter.com/thukeg" target="_blank">TWITTER</a> • 📃 <a href="https://arxiv.org/abs/2103.10360" target="_blank">[GLM@ACL 22]</a> <a href="https://github.com/THUDM/GLM" target="_blank">[GITHUB]</a> • 📃 <a href="https://arxiv.org/abs/2210.02414" target="_blank">[GLM-130B@ICLR 23]</a> <a href="https://github.com/THUDM/GLM-130B" target="_blank">[GITHUB]</a> <br>
 </p>
 <p align="center">
-    👋 加入我们的 <a href="https://join.slack.com/t/chatglm/shared_invite/zt-1th2q5u69-7tURzFuOPanmuHy9hsZnKA" target="_blank">Slack</a> 和 <a href="resources/WECHAT.md" target="_blank">WeChat</a>
+    👋 加入我们的<a href="https://join.slack.com/t/chatglm/shared_invite/zt-1th2q5u69-7tURzFuOPanmuHy9hsZnKA" target="_blank">SLACK</a>和<a href="resources/WECHAT.md" target="_blank">WECHAT</a>
 </p>
+
 
 ## 介绍
 
-ChatGLM-6B 是一个开源的、支持中英双语的对话语言模型，基于 [General Language Model (GLM)](https://github.com/THUDM/GLM) 架构，具有 62 亿参数。结合模型量化技术，用户可以在消费级的显卡上进行本地部署（INT4 量化级别下最低只需 6GB 显存）。
-ChatGLM-6B 使用了和 ChatGPT 相似的技术，针对中文问答和对话进行了优化。经过约 1T 标识符的中英双语训练，辅以监督微调、反馈自助、人类反馈强化学习等技术的加持，62 亿参数的 ChatGLM-6B 已经能生成相当符合人类偏好的回答，更多信息请参考我们的[博客](https://chatglm.cn/blog)。
+CHATGLM-6B是一个开源的、支持中英双语的对话语言模型，基于[GENERAL LANGUAGE MODEL(GLM)](https://github.com/THUDM/GLM)架构，具有62亿参数。结合模型量化技术，用户可以在消费级的显卡上进行本地部署（INT4量化级别下最低只需6GB显存）。
+CHATGLM-6B使用了和CHATGPT相似的技术，针对中文问答和对话进行了优化。经过约1T标识符的中英双语训练，辅以监督微调、反馈自助、人类反馈强化学习等技术的加持，62亿参数的CHATGLM-6B已经能生成相当符合人类偏好的回答，更多信息请参考我们的[博客](https://chatglm.cn/blog)。
 
-为了方便下游开发者针对自己的应用场景定制模型，我们同时实现了基于 [P-Tuning v2](https://github.com/THUDM/P-tuning-v2) 的高效参数微调方法 [(使用指南)](ptuning/README.md) ，INT4 量化级别下最低只需 7GB 显存即可启动微调。
+为了方便下游开发者针对自己的应用场景定制模型，我们同时实现了基于[P-TUNING V2](https://github.com/THUDM/P-tuning-v2)的高效参数微调方法[(使用指南)](ptuning/README.md)，INT4量化级别下最低只需7GB显存即可启动微调。
 
-不过，由于 ChatGLM-6B 的规模较小，目前已知其具有相当多的[**局限性**](#局限性)，如事实性/数学逻辑错误，可能生成有害/有偏见内容，较弱的上下文能力，自我认知混乱，以及对英文指示生成与中文指示完全矛盾的内容。请大家在使用前了解这些问题，以免产生误解。更大的基于 1300 亿参数 [GLM-130B](https://github.com/THUDM/GLM-130B) 的 ChatGLM 正在内测开发中。
+不过，由于CHATGLM-6B的规模较小，目前已知其具有相当多的[**局限性**](#局限性)，如事实性/数学逻辑错误，可能生成有害/有偏见内容，较弱的上下文能力，自我认知混乱，以及对英文指示生成与中文指示完全矛盾的内容。请大家在使用前了解这些问题，以免产生误解。更大的基于1300亿参数[GLM-130B](https://github.com/THUDM/GLM-130B)的CHATGLM正在内测开发中。
 
 *Read this in [English](README_en.md).*
 
 ## 友情链接
-对 ChatGLM 进行加速的开源项目：
-* [ChatGLM-MNN](https://github.com/wangzhaode/ChatGLM-MNN): 一个基于 MNN 的 ChatGLM-6B C++ 推理实现，支持根据显存大小自动分配计算任务给 GPU 和 CPU
-* [JittorLLMs](https://github.com/Jittor/JittorLLMs)：最低3G显存或者没有显卡都可运行 ChatGLM-6B FP16， 支持Linux、windows、Mac部署
+对CHATGLM进行加速的开源项目：
+* [CHATGLM-MNN](https://github.com/wangzhaode/ChatGLM-MNN)：一个基于MNN的CHATGLM-6B C++推理实现，支持根据显存大小自动分配计算任务给GPU和CPU
+* [JITTORLLMs](https://github.com/Jittor/JittorLLMs)：最低3G显存或者没有显卡都可运行CHATGLM-6B FP16，支持LINUX、WINDOWS、MAC部署
 
-基于或使用了 ChatGLM-6B 的开源项目：
-* [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)：基于 langchain 的 ChatGLM 应用，实现基于可扩展知识库的问答
-* [闻达](https://github.com/l15y/wenda)：大型语言模型调用平台，基于 ChatGLM-6B 实现了类 ChatPDF 功能
-* [chatgpt_academic](https://github.com/binary-husky/chatgpt_academic): 支持ChatGLM-6B的学术写作与编程工具箱，具有模块化和多线程调用LLM的特点，可并行调用多种LLM。
-* [glm-bot](https://github.com/initialencounter/glm-bot)：将ChatGLM接入Koishi可在各大聊天平台上调用ChatGLM
+基于或使用了CHATGLM-6B的开源项目：
+* [LANGCHAIN-CHATGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)：基于LANGCHAIN的CHATGLM应用，实现基于可扩展知识库的问答
+* [闻达](https://github.com/l15y/wenda)：大型语言模型调用平台，基于CHATGLM-6B实现了类CHATPDF功能
+* [CHATGPT_ACADEMIC](https://github.com/binary-husky/chatgpt_academic)：支持CHATGLM-6B的学术写作与编程工具箱，具有模块化和多线程调用LLM的特点，可并行调用多种LLM。
+* [GLM-BOT](https://github.com/initialencounter/glm-bot)：将CHATGLM接入KOISHI可在各大聊天平台上调用CHATGLM
 
-支持 ChatGLM-6B 和相关应用在线训练的示例项目：
-* [ChatGLM-6B 的部署与微调教程](https://www.heywhale.com/mw/project/6436d82948f7da1fee2be59e)
-* [ChatGLM-6B 结合 langchain 实现本地知识库 QA Bot](https://www.heywhale.com/mw/project/643977aa446c45f4592a1e59)
+支持CHATGLM-6B和相关应用在线训练的示例项目：
+* [CHATGLM-6B的部署与微调教程](https://www.heywhale.com/mw/project/6436d82948f7da1fee2be59e)
+* [CHATGLM-6B结合LANGCHAIN实现本地知识库QA BOT](https://www.heywhale.com/mw/project/643977aa446c45f4592a1e59)
 
 第三方评测：
-* [Measuring Massive Multitask Chinese Understanding](https://arxiv.org/abs/2304.12986)
+* [MEASURING MASSIVE MULTITASK CHINESE UNDERSTANDING](https://arxiv.org/abs/2304.12986)
 
-更多开源项目参见 [PROJECT.md](PROJECT.md)
+更多开源项目参见[PROJECT.md](PROJECT.md)
 
 ## 使用方式
 
@@ -49,13 +50,13 @@ ChatGLM-6B 使用了和 ChatGPT 相似的技术，针对中文问答和对话进
 | INT4           | 6 GB                      | 7 GB                              |
 ### 环境安装
 
-使用 pip 安装依赖：`pip install -r requirements.txt`，其中 `transformers` 库版本推荐为 `4.27.1`，但理论上不低于 `4.23.1` 即可。
+使用PIP安装依赖：`pip install -r requirements.txt`，其中 `transformers` 库版本推荐为 `4.27.1`，但理论上不低于 `4.23.1` 即可。
 
-此外，如果需要在 cpu 上运行量化后的模型，还需要安装 `gcc` 与 `openmp`。多数 Linux 发行版默认已安装。对于 Windows ，可在安装 [TDM-GCC](https://jmeubank.github.io/tdm-gcc/) 时勾选 `openmp`。 Windows 测试环境 `gcc` 版本为 `TDM-GCC 10.3.0`， Linux 为 `gcc 11.3.0`。在 MacOS 上请参考 [Q1](FAQ.md#q1)。
+此外，如果需要在CPU上运行量化后的模型，还需要安装`gcc`与`openmp`。多数LINUX发行版默认已安装。对于WINDOWS，可在安装[TDM-GCC](https://jmeubank.github.io/tdm-gcc/)时勾选 `openmp`。WINDOWS测试环境`gcc`版本为`TDM-GCC 10.3.0`，LINUX为`gcc 11.3.0`。在MACOS上请参考[Q1](FAQ.md#q1)。
 
-### 代码调用 
+### 代码调用
 
-可以通过如下代码调用 ChatGLM-6B 模型来生成对话：
+可以通过如下代码调用CHATGLM-6B模型来生成对话：
 
 ```python
 >>> from transformers import AutoTokenizer, AutoModel
@@ -110,38 +111,38 @@ git clone https://github.com/THUDM/ChatGLM-6B
 cd ChatGLM-6B
 ```
 
-### 网页版 Demo
+### 网页版DEMO
 
 ![web-demo](resources/web-demo.gif)
 
-首先安装 Gradio：`pip install gradio`，然后运行仓库中的 [web_demo.py](web_demo.py)： 
+首先安装GRADIO：`pip install gradio`，然后运行仓库中的[WEB_DEOM.PY](web_demo.py)： 
 
 ```shell
 python web_demo.py
 ```
 
-程序会运行一个 Web Server，并输出地址。在浏览器中打开输出的地址即可使用。最新版 Demo 实现了打字机效果，速度体验大大提升。注意，由于国内 Gradio 的网络访问较为缓慢，启用 `demo.queue().launch(share=True, inbrowser=True)` 时所有网络会经过 Gradio 服务器转发，导致打字机体验大幅下降，现在默认启动方式已经改为 `share=False`，如有需要公网访问的需求，可以重新修改为 `share=True` 启动。
+程序会运行一个WEB SERVER，并输出地址。在浏览器中打开输出的地址即可使用。最新版DEMO实现了打字机效果，速度体验大大提升。注意，由于国内GRADIO的网络访问较为缓慢，启用`demo.queue().launch(share=True, inbrowser=True)`时所有网络会经过GRADIO服务器转发，导致打字机体验大幅下降，现在默认启动方式已经改为`share=False`，如有需要公网访问的需求，可以重新修改为`share=True`启动。
 
-感谢 [@AdamBear](https://github.com/AdamBear) 实现了基于 Streamlit 的网页版 Demo，运行方式见[#117](https://github.com/THUDM/ChatGLM-6B/pull/117).
+感谢[@ADAMBEAR](https://github.com/AdamBear)实现了基于STREAMLIT的网页版DEMO，运行方式见[#117](https://github.com/THUDM/ChatGLM-6B/pull/117).
 
-### 命令行 Demo
+### 命令行DEMO
 
 ![cli-demo](resources/cli-demo.png)
 
-运行仓库中 [cli_demo.py](cli_demo.py)：
+运行仓库中[CLI_DEMO.PY](cli_demo.py)：
 
 ```shell
 python cli_demo.py
 ```
 
-程序会在命令行中进行交互式的对话，在命令行中输入指示并回车即可生成回复，输入 `clear` 可以清空对话历史，输入 `stop` 终止程序。
+程序会在命令行中进行交互式的对话，在命令行中输入指示并回车即可生成回复，输入`clear`可以清空对话历史，输入`stop`终止程序。
 
 ### API部署
-首先需要安装额外的依赖 `pip install fastapi uvicorn`，然后运行仓库中的 [api.py](api.py)：
+首先需要安装额外的依赖`pip install fastapi uvicorn`，然后运行仓库中的[API.PY](api.py)：
 ```shell
 python api.py
 ```
-默认部署在本地的 8000 端口，通过 POST 方法进行调用
+默认部署在本地的8000端口，通过POST方法进行调用
 ```shell
 curl -X POST "http://127.0.0.1:8000" \
      -H 'Content-Type: application/json' \
@@ -159,33 +160,33 @@ curl -X POST "http://127.0.0.1:8000" \
 
 ## 低成本部署
 ### 模型量化
-默认情况下，模型以 FP16 精度加载，运行上述代码需要大概 13GB 显存。如果你的 GPU 显存有限，可以尝试以量化方式加载模型，使用方法如下：
+默认情况下，模型以FP16精度加载，运行上述代码需要大概13GB显存。如果你的GPU显存有限，可以尝试以量化方式加载模型，使用方法如下：
 
 ```python
-# 按需修改，目前只支持 4/8 bit 量化
+# 按需修改，目前只支持4/8BIT量化
 model = AutoModel.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True).quantize(8).half().cuda()
 ```
 
-进行 2 至 3 轮对话后，8-bit 量化下 GPU 显存占用约为 10GB，4-bit 量化下仅需 6GB 占用。随着对话轮数的增多，对应消耗显存也随之增长，由于采用了相对位置编码，理论上 ChatGLM-6B 支持无限长的 context-length，但总长度超过 2048（训练长度）后性能会逐渐下降。
+进行2至3轮对话后，8-BIT量化下GPU显存占用约为10GB，4-BIT量化下仅需6GB占用。随着对话轮数的增多，对应消耗显存也随之增长，由于采用了相对位置编码，理论上CHATGLM-6B支持无限长的CONTEXT-LENGTH，但总长度超过2048（训练长度）后性能会逐渐下降。
 
-模型量化会带来一定的性能损失，经过测试，ChatGLM-6B 在 4-bit 量化下仍然能够进行自然流畅的生成。使用 [GPT-Q](https://arxiv.org/abs/2210.17323) 等量化方案可以进一步压缩量化精度/提升相同量化精度下的模型性能，欢迎大家提出对应的 Pull Request。
+模型量化带来一定的性能损失，经过测试，CHATGLM-6B在4-BIT量化下仍然能够进行自然流畅的生成。使用[GPT-Q](https://arxiv.org/abs/2210.17323)等量化方案可以进一步压缩量化精度/提升相同量化精度下的模型性能，欢迎大家提出对应的PULL REQUEDT。
 
-量化过程需要在内存中首先加载 FP16 格式的模型，消耗大概 13GB 的内存。如果你的内存不足的话，可以直接加载量化后的模型，INT4 量化后的模型仅需大概 5.2GB 的内存：
+量化过程需要在内存中首先加载FP16格式的模型，消耗大概13GB的内存。如果你的内存不足的话，可以直接加载量化后的模型，INT4量化后的模型仅需大概5.2GB的内存：
 ```python
-# INT8 量化的模型将"THUDM/chatglm-6b-int4"改为"THUDM/chatglm-6b-int8"
+# INT8量化的模型将"THUDM/CHATGLM-6B-INT4"改为"THUDM/CHATGLM-6B-INT8"
 model = AutoModel.from_pretrained("THUDM/chatglm-6b-int4", trust_remote_code=True).half().cuda()
 ```
 量化模型的参数文件也可以从[这里](https://cloud.tsinghua.edu.cn/d/674208019e314311ab5c/)手动下载。
 
-### CPU 部署
-如果你没有 GPU 硬件的话，也可以在 CPU 上进行推理，但是推理速度会更慢。使用方法如下（需要大概 32GB 内存）
+### CPU部署
+如果你没有GPU硬件的话，也可以在CPU上进行推理，但是推理速度会更慢。使用方法如下（需要大概32GB内存）
 ```python
 model = AutoModel.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True).float()
 ```
 
 如果你的内存不足，可以直接加载量化后的模型：
 ```python
-# INT8 量化的模型将"THUDM/chatglm-6b-int4"改为"THUDM/chatglm-6b-int8"
+# INT8量化的模型将"THUDM/CHATGLM-6B-INT4"改为"THUDM/CHATGLM-6B-INT8"
 model = AutoModel.from_pretrained("THUDM/chatglm-6b-int4",trust_remote_code=True).float()
 ```
 

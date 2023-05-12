@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from typing import Optional
 
 
@@ -11,27 +12,34 @@ class ModelArguments:
     model_name_or_path: str = field(
         metadata={"help": "Path to pretrained model or model identifier from huggingface.co/models"}
     )
+
     ptuning_checkpoint: str = field(
         default=None, metadata={"help": "Path to p-tuning v2 checkpoints"}
     )
+
     config_name: Optional[str] = field(
         default=None, metadata={"help": "Pretrained config name or path if not the same as model_name"}
     )
+
     tokenizer_name: Optional[str] = field(
         default=None, metadata={"help": "Pretrained tokenizer name or path if not the same as model_name"}
     )
+
     cache_dir: Optional[str] = field(
         default=None,
         metadata={"help": "Where to store the pretrained models downloaded from huggingface.co"},
     )
+
     use_fast_tokenizer: bool = field(
         default=True,
         metadata={"help": "Whether to use one of the fast tokenizer (backed by the tokenizers library) or not."},
     )
+
     model_revision: str = field(
         default="main",
         metadata={"help": "The specific model version to use (can be a branch name, tag name or commit id)."},
     )
+
     use_auth_token: bool = field(
         default=False,
         metadata={
@@ -41,6 +49,7 @@ class ModelArguments:
             )
         },
     )
+
     resize_position_embeddings: Optional[bool] = field(
         default=None,
         metadata={
@@ -50,12 +59,15 @@ class ModelArguments:
             )
         },
     )
+
     quantization_bit: Optional[int] = field(
         default=None
     )
+
     pre_seq_len: Optional[int] = field(
         default=None
     )
+
     prefix_projection: bool = field(
         default=False
     )
@@ -72,24 +84,30 @@ class DataTrainingArguments:
     dataset_name: Optional[str] = field(
         default=None, metadata={"help": "The name of the dataset to use (via the datasets library)."}
     )
+
     dataset_config_name: Optional[str] = field(
         default=None, metadata={"help": "The configuration name of the dataset to use (via the datasets library)."}
     )
+
     prompt_column: Optional[str] = field(
         default=None,
         metadata={"help": "The name of the column in the datasets containing the full texts (for summarization)."},
     )
+
     response_column: Optional[str] = field(
         default=None,
         metadata={"help": "The name of the column in the datasets containing the summaries (for summarization)."},
     )
+
     history_column: Optional[str] = field(
         default=None,
         metadata={"help": "The name of the column in the datasets containing the history of chat."},
     )
+
     train_file: Optional[str] = field(
         default=None, metadata={"help": "The input training data file (a jsonlines or csv file)."}
     )
+
     validation_file: Optional[str] = field(
         default=None,
         metadata={
@@ -98,19 +116,23 @@ class DataTrainingArguments:
             )
         },
     )
+
     test_file: Optional[str] = field(
         default=None,
         metadata={
             "help": "An optional input test data file to evaluate the metrics (rouge) on (a jsonlines or csv file)."
         },
     )
+
     overwrite_cache: bool = field(
         default=False, metadata={"help": "Overwrite the cached training and evaluation sets"}
     )
+
     preprocessing_num_workers: Optional[int] = field(
         default=None,
         metadata={"help": "The number of processes to use for the preprocessing."},
     )
+
     max_source_length: Optional[int] = field(
         default=1024,
         metadata={
@@ -120,6 +142,7 @@ class DataTrainingArguments:
             )
         },
     )
+
     max_target_length: Optional[int] = field(
         default=128,
         metadata={
@@ -129,6 +152,7 @@ class DataTrainingArguments:
             )
         },
     )
+
     val_max_target_length: Optional[int] = field(
         default=None,
         metadata={
@@ -140,6 +164,7 @@ class DataTrainingArguments:
             )
         },
     )
+
     pad_to_max_length: bool = field(
         default=False,
         metadata={
@@ -150,6 +175,7 @@ class DataTrainingArguments:
             )
         },
     )
+
     max_train_samples: Optional[int] = field(
         default=None,
         metadata={
@@ -159,6 +185,7 @@ class DataTrainingArguments:
             )
         },
     )
+
     max_eval_samples: Optional[int] = field(
         default=None,
         metadata={
@@ -168,6 +195,7 @@ class DataTrainingArguments:
             )
         },
     )
+
     max_predict_samples: Optional[int] = field(
         default=None,
         metadata={
@@ -177,6 +205,7 @@ class DataTrainingArguments:
             )
         },
     )
+
     num_beams: Optional[int] = field(
         default=None,
         metadata={
@@ -186,12 +215,14 @@ class DataTrainingArguments:
             )
         },
     )
+
     ignore_pad_token_for_loss: bool = field(
         default=True,
         metadata={
             "help": "Whether to ignore the tokens corresponding to padded labels in the loss computation or not."
         },
     )
+
     source_prefix: Optional[str] = field(
         default="", metadata={"help": "A prefix to add before every source text (useful for T5 models)."}
     )
@@ -207,18 +238,26 @@ class DataTrainingArguments:
         },
     )
 
-    
-
     def __post_init__(self):
-        if self.dataset_name is None and self.train_file is None and self.validation_file is None and self.test_file is None:
-            raise ValueError("Need either a dataset name or a training/validation/test file.")
-        else:
-            if self.train_file is not None:
-                extension = self.train_file.split(".")[-1]
-                assert extension in ["csv", "json"], "`train_file` should be a csv or a json file."
-            if self.validation_file is not None:
-                extension = self.validation_file.split(".")[-1]
-                assert extension in ["csv", "json"], "`validation_file` should be a csv or a json file."
-        if self.val_max_target_length is None:
-            self.val_max_target_length = self.max_target_length
 
+        if self.dataset_name is None and self.train_file is None and self.validation_file is None and self.test_file is None:
+
+            raise ValueError("Need either a dataset name or a training/validation/test file.")
+
+        else:
+
+            if self.train_file is not None:
+                #
+                extension = self.train_file.split(".")[-1]
+
+                assert extension in ["csv", "json"], "`train_file` should be a csv or a json file."
+
+            if self.validation_file is not None:
+                #
+                extension = self.validation_file.split(".")[-1]
+
+                assert extension in ["csv", "json"], "`validation_file` should be a csv or a json file."
+
+        if self.val_max_target_length is None:
+            #
+            self.val_max_target_length = self.max_target_length
