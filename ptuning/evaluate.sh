@@ -1,5 +1,7 @@
 PRE_SEQ_LEN=128
+
 CHECKPOINT=adgen-chatglm-6b-pt-128-2e-2
+
 STEP=3000
 
 CUDA_VISIBLE_DEVICES=0 python3 main.py \

@@ -1,6 +1,10 @@
 PRE_SEQ_LEN=128
 
-LR=1e-2
+LR=1e-2 # 学习率不一样
+
+# 指定的参数不一样了：
+# --train_file $CHAT_TRAIN_DATA
+# --validation_file $CHAT_VAL_DATA
 
 CUDA_VISIBLE_DEVICES=0 python3 main.py \
     --do_train \
@@ -25,4 +29,3 @@ CUDA_VISIBLE_DEVICES=0 python3 main.py \
     --learning_rate $LR \
     --pre_seq_len $PRE_SEQ_LEN \
     --quantization_bit 4
-

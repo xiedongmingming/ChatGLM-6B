@@ -185,7 +185,6 @@ def main():
         #
         # If we pass only one argument to the script and it's the path to a json file, let's parse it to get our arguments.
         #
-
         model_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))[0]
 
     else:
@@ -215,13 +214,13 @@ def main():
 
         new_prefix_state_dict = {}
 
-        for k, v in prefix_state_dict.items():
+        for k, v in prefix_state_dict.items():  # ???这里是啥
 
             if k.startswith("transformer.prefix_encoder."):
                 #
                 new_prefix_state_dict[k[len("transformer.prefix_encoder."):]] = v
 
-        model.transformer.prefix_encoder.load_state_dict(new_prefix_state_dict)
+        model.transformer.prefix_encoder.load_state_dict(new_prefix_state_dict)  # TRANSFORMER的PREFIX_ENCODER？？？
 
     else:
 

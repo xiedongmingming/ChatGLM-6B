@@ -1,4 +1,5 @@
 CHECKPOINT=adgen-chatglm-6b-ft-1e-4
+
 STEP=3000
 
 CUDA_VISIBLE_DEVICES=0 python3 main.py \

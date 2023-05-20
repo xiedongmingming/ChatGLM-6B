@@ -69,6 +69,7 @@ def main():
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
+    ###################################################################################
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
         datefmt="%m/%d/%Y %H:%M:%S",
@@ -96,38 +97,40 @@ def main():
 
     logger.info(f"Training/evaluation parameters {training_args}")
 
-    # Set seed before initializing model.
-    set_seed(training_args.seed)
+    ###################################################################################
+    set_seed(training_args.seed)  # Set seed before initializing model.
 
-    # Load dataset
+    ###################################################################################
+    # 加载数据集
     data_files = {}
 
-    if data_args.train_file is not None:
+    if data_args.train_file is not None:  # 训练数据
         #
         data_files["train"] = data_args.train_file
 
         extension = data_args.train_file.split(".")[-1]
 
-    if data_args.validation_file is not None:
+    if data_args.validation_file is not None:  # 验证数据
         #
         data_files["validation"] = data_args.validation_file
 
         extension = data_args.validation_file.split(".")[-1]
 
-    if data_args.test_file is not None:
+    if data_args.test_file is not None:  # 测试数据
         #
         data_files["test"] = data_args.test_file
 
         extension = data_args.test_file.split(".")[-1]
 
     raw_datasets = load_dataset(
-        extension,
+        extension,  # 扩展名(三个数据集必须保持一致)
         data_files=data_files,
         cache_dir=model_args.cache_dir,
         use_auth_token=True if model_args.use_auth_token else None,
     )
 
-    # Load pretrained model and tokenizer
+    ###################################################################################
+    # 加载预训练模型和TOKENIZER
     config = AutoConfig.from_pretrained(model_args.model_name_or_path, trust_remote_code=True)
 
     config.pre_seq_len = model_args.pre_seq_len
@@ -136,8 +139,7 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path, trust_remote_code=True)
 
     if model_args.ptuning_checkpoint is not None:
-        # Evaluation
-        # Loading extra state dict of prefix encoder
+        #
         model = AutoModel.from_pretrained(model_args.model_name_or_path, config=config, trust_remote_code=True)
 
         prefix_state_dict = torch.load(os.path.join(model_args.ptuning_checkpoint, "pytorch_model.bin"))
@@ -164,22 +166,21 @@ def main():
 
     if model_args.pre_seq_len is not None:
         #
-        # P-tuning v2
+        # p-tuning v2
         #
         model = model.half()
         model.transformer.prefix_encoder.float()
 
     else:
         #
-        # Finetune
+        # finetune
         #
         model = model.float()
 
+    ###################################################################################
     prefix = data_args.source_prefix if data_args.source_prefix is not None else ""
 
-    # Preprocessing the datasets.
-    # We need to tokenize inputs and targets.
-    if training_args.do_train:
+    if training_args.do_train:  # preprocessing the datasets. we need to tokenize inputs and targets.
 
         column_names = raw_datasets["train"].column_names
 
@@ -197,14 +198,13 @@ def main():
 
         return
 
-    # Get the column names for input/target.
+    # 获取输入输出的列名
     prompt_column = data_args.prompt_column
 
     response_column = data_args.response_column
 
     history_column = data_args.history_column
 
-    # Temporarily set max_target_length for training.
     max_target_length = data_args.max_target_length
 
     def preprocess_function_eval(examples):

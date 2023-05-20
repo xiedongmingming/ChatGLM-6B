@@ -6,6 +6,7 @@ from transformers import AutoTokenizer, AutoModel
 
 import readline
 
+
 tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True)
 
 model = AutoModel.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True).quantize(8).half().cuda()
@@ -82,7 +83,7 @@ def main():
                     #
                     os.system(clear_command)
 
-                    print(build_prompt(history), flush=True) # ？？？刷新
+                    print(build_prompt(history), flush=True)  # ？？？刷新
 
                     signal.signal(signal.SIGINT, signal_handler)  # 每次都要重新设置
 
