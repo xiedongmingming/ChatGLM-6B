@@ -4,7 +4,7 @@ from typing import Optional
 
 
 @dataclass
-class ModelArguments:
+class ModelArguments:  # 与我们将从中进行微调的模型/配置/标记器有关的参数
     """
     Arguments pertaining to which model/config/tokenizer we are going to fine-tune from.
     """
@@ -74,7 +74,7 @@ class ModelArguments:
 
 
 @dataclass
-class DataTrainingArguments:
+class DataTrainingArguments:  # 关于我们要输入模型用于训练和评估的数据的参数
     """
     Arguments pertaining to what data we are going to input our model for training and eval.
     """

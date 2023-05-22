@@ -51,6 +51,7 @@ from trainer_seq2seq import Seq2SeqTrainer
 
 from arguments import ModelArguments, DataTrainingArguments
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -58,13 +59,13 @@ def main():
     #
     parser = HfArgumentParser(  # 共计3类参数
         (
-            ModelArguments,
-            DataTrainingArguments,
-            Seq2SeqTrainingArguments
+            ModelArguments,  # 待微调的模型
+            DataTrainingArguments,  # 用于微调的数据集
+            Seq2SeqTrainingArguments  # 微调模型训练相关参数？？？
         )
     )
 
-    if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
+    if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):  # 通过配置文件解析参数
         model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
@@ -76,11 +77,11 @@ def main():
         handlers=[logging.StreamHandler(sys.stdout)],
     )
 
-    if training_args.should_log:
+    if training_args.should_log:  # 当前进程是否应该产生日志
         #
         transformers.utils.logging.set_verbosity_info()
 
-    log_level = training_args.get_process_log_level()
+    log_level = training_args.get_process_log_level()  # 返回要使用的日志级别，具体取决于该进程是否是节点0主进程的主进程节点非0或非主进程的。
 
     logger.setLevel(log_level)
 
@@ -138,7 +139,7 @@ def main():
 
     tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path, trust_remote_code=True)
 
-    if model_args.ptuning_checkpoint is not None:
+    if model_args.ptuning_checkpoint is not None:  # 有CHECKPOINT
         #
         model = AutoModel.from_pretrained(model_args.model_name_or_path, config=config, trust_remote_code=True)
 
@@ -152,7 +153,7 @@ def main():
                 #
                 new_prefix_state_dict[k[len("transformer.prefix_encoder."):]] = v
 
-        model.transformer.prefix_encoder.load_state_dict(new_prefix_state_dict)
+        model.transformer.prefix_encoder.load_state_dict(new_prefix_state_dict)  # 将CHECKPOINT的数据添加到PREFIX_ENCODER中
 
     else:
 
@@ -162,13 +163,14 @@ def main():
         #
         print(f"Quantized to {model_args.quantization_bit} bit")
 
-        model = model.quantize(model_args.quantization_bit)
+        model = model.quantize(model_args.quantization_bit)  # ？？？？量化是啥意思
 
     if model_args.pre_seq_len is not None:
         #
         # p-tuning v2
         #
         model = model.half()
+
         model.transformer.prefix_encoder.float()
 
     else:
@@ -335,13 +337,13 @@ def main():
 
         train_dataset = raw_datasets["train"]
 
-        if data_args.max_train_samples is not None:
+        if data_args.max_train_samples is not None:  # 采样
             #
             max_train_samples = min(len(train_dataset), data_args.max_train_samples)
 
             train_dataset = train_dataset.select(range(max_train_samples))
 
-        with training_args.main_process_first(desc="train dataset map pre-processing"):
+        with training_args.main_process_first(desc="train dataset map pre-processing"):  # 表示先直接用主进程进行MAP操作(缓存后REPLICATE进程直接使用)
 
             train_dataset = train_dataset.map(
                 preprocess_function_train,
