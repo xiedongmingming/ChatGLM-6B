@@ -51,7 +51,6 @@ from trainer_seq2seq import Seq2SeqTrainer
 
 from arguments import ModelArguments, DataTrainingArguments
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -343,7 +342,8 @@ def main():
 
             train_dataset = train_dataset.select(range(max_train_samples))
 
-        with training_args.main_process_first(desc="train dataset map pre-processing"):  # 表示先直接用主进程进行MAP操作(缓存后REPLICATE进程直接使用)
+        with training_args.main_process_first(
+                desc="train dataset map pre-processing"):  # 表示先直接用主进程进行MAP操作(缓存后REPLICATE进程直接使用)
 
             train_dataset = train_dataset.map(
                 preprocess_function_train,
@@ -414,7 +414,9 @@ def main():
 
         print_dataset_example(predict_dataset[0])
 
+    #
     # Data collator
+    #
     label_pad_token_id = -100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id
 
     data_collator = DataCollatorForSeq2Seq(
@@ -425,7 +427,9 @@ def main():
         padding=False
     )
 
+    #
     # Metric
+    #
     def compute_metrics(eval_preds):
 
         preds, labels = eval_preds
@@ -437,7 +441,9 @@ def main():
         decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
 
         if data_args.ignore_pad_token_for_loss:
+            #
             # Replace -100 in the labels as we can't decode them.
+            #
             labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
 
         decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
@@ -474,7 +480,9 @@ def main():
 
         return score_dict
 
+    #
     # Override the decoding parameters of Seq2SeqTrainer
+    #
     training_args.generation_max_length = (
         training_args.generation_max_length
         if training_args.generation_max_length is not None
@@ -485,7 +493,9 @@ def main():
         data_args.num_beams if data_args.num_beams is not None else training_args.generation_num_beams
     )
 
+    #
     # Initialize our Trainer
+    #
     trainer = Seq2SeqTrainer(
         model=model,
         args=training_args,
@@ -497,7 +507,9 @@ def main():
         save_prefixencoder=model_args.pre_seq_len is not None
     )
 
+    #
     # Training
+    #
     if training_args.do_train:
 
         checkpoint = None
@@ -507,6 +519,7 @@ def main():
             checkpoint = training_args.resume_from_checkpoint
 
         # elif last_checkpoint is not None:
+        #
         #     checkpoint = last_checkpoint
 
         model.gradient_checkpointing_enable()
@@ -530,7 +543,9 @@ def main():
 
         trainer.save_state()
 
+    #
     # Evaluation
+    #
     results = {}
 
     max_seq_length = data_args.max_source_length + data_args.max_target_length + 1

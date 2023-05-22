@@ -27,6 +27,7 @@ logger = logging.get_logger(__name__)
 
 
 class Seq2SeqTrainer(Trainer):
+
     def evaluate(
             self,
             eval_dataset: Optional[Dataset] = None,
@@ -67,11 +68,15 @@ class Seq2SeqTrainer(Trainer):
         """
 
         gen_kwargs = gen_kwargs.copy()
+
         if gen_kwargs.get("max_length") is None and gen_kwargs.get("max_new_tokens") is None:
+            #
             gen_kwargs["max_length"] = self.args.generation_max_length
+
         gen_kwargs["num_beams"] = (
             gen_kwargs["num_beams"] if gen_kwargs.get("num_beams") is not None else self.args.generation_num_beams
         )
+
         self._gen_kwargs = gen_kwargs
 
         return super().evaluate(eval_dataset, ignore_keys=ignore_keys, metric_key_prefix=metric_key_prefix)
@@ -124,11 +129,15 @@ class Seq2SeqTrainer(Trainer):
         """
 
         gen_kwargs = gen_kwargs.copy()
+
         if gen_kwargs.get("max_length") is None and gen_kwargs.get("max_new_tokens") is None:
+            #
             gen_kwargs["max_length"] = self.args.generation_max_length
+
         gen_kwargs["num_beams"] = (
             gen_kwargs["num_beams"] if gen_kwargs.get("num_beams") is not None else self.args.generation_num_beams
         )
+
         self._gen_kwargs = gen_kwargs
 
         return super().predict(test_dataset, ignore_keys=ignore_keys, metric_key_prefix=metric_key_prefix)
@@ -167,16 +176,22 @@ class Seq2SeqTrainer(Trainer):
             )
 
         has_labels = "labels" in inputs
+
         inputs = self._prepare_inputs(inputs)
 
         # XXX: adapt synced_gpus for fairscale as well
         gen_kwargs = self._gen_kwargs.copy()
+
         if gen_kwargs.get("max_length") is None and gen_kwargs.get("max_new_tokens") is None:
+            #
             gen_kwargs["max_length"] = self.model.config.max_length
+
         gen_kwargs["num_beams"] = (
             gen_kwargs["num_beams"] if gen_kwargs.get("num_beams") is not None else self.model.config.num_beams
         )
+
         default_synced_gpus = True if is_deepspeed_zero3_enabled() else False
+
         gen_kwargs["synced_gpus"] = (
             gen_kwargs["synced_gpus"] if gen_kwargs.get("synced_gpus") is not None else default_synced_gpus
         )
@@ -197,42 +212,57 @@ class Seq2SeqTrainer(Trainer):
             generation_inputs = inputs[self.model.main_input_name]
 
         gen_kwargs["input_ids"] = generation_inputs
+
         generated_tokens = self.model.generate(**gen_kwargs)
         generated_tokens = generated_tokens[:, generation_inputs.size()[-1]:]
 
         # in case the batch is shorter than max length, the output should be padded
         if gen_kwargs.get("max_length") is not None and generated_tokens.shape[-1] < gen_kwargs["max_length"]:
+
             generated_tokens = self._pad_tensors_to_max_len(generated_tokens, gen_kwargs["max_length"])
+
         elif gen_kwargs.get("max_new_tokens") is not None and generated_tokens.shape[-1] < (
                 gen_kwargs["max_new_tokens"] + 1
         ):
+
             generated_tokens = self._pad_tensors_to_max_len(generated_tokens, gen_kwargs["max_new_tokens"] + 1)
 
         loss = None
 
         if self.args.prediction_loss_only:
+            #
             return (loss, None, None)
 
         if has_labels:
+
             labels = inputs["labels"]
+
             if gen_kwargs.get("max_length") is not None and labels.shape[-1] < gen_kwargs["max_length"]:
                 labels = self._pad_tensors_to_max_len(labels, gen_kwargs["max_length"])
             elif gen_kwargs.get("max_new_tokens") is not None and labels.shape[-1] < (
                     gen_kwargs["max_new_tokens"] + 1
             ):
+
                 labels = self._pad_tensors_to_max_len(labels, (gen_kwargs["max_new_tokens"] + 1))
+
         else:
+
             labels = None
 
         return (loss, generated_tokens, labels)
 
     def _pad_tensors_to_max_len(self, tensor, max_length):
+
         if self.tokenizer is not None and hasattr(self.tokenizer, "pad_token_id"):
+            #
             # If PAD token is not defined at least EOS token has to be defined
+            #
             pad_token_id = (
                 self.tokenizer.pad_token_id if self.tokenizer.pad_token_id is not None else self.tokenizer.eos_token_id
             )
+
         else:
+
             if self.model.config.pad_token_id is not None:
                 pad_token_id = self.model.config.pad_token_id
             else:
@@ -241,5 +271,7 @@ class Seq2SeqTrainer(Trainer):
         padded_tensor = pad_token_id * torch.ones(
             (tensor.shape[0], max_length), dtype=tensor.dtype, device=tensor.device
         )
+
         padded_tensor[:, : tensor.shape[-1]] = tensor
+
         return padded_tensor
