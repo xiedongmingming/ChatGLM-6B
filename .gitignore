@@ -132,3 +132,7 @@ dmypy.json
 # Mac system file
 model/
 .idea
+ptuning/AdvertiseGen.tar.gz
+ptuning/AdvertiseGen
+ptuning/output
+ptuning/wandb
