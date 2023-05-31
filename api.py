@@ -56,6 +56,11 @@ async def create_item(request: Request):
                     top_p=top_p if top_p else 0.7,
                     temperature=temperature if temperature else 0.95
             ):
+                #
+                now = datetime.datetime.now()
+
+                time = now.strftime("%Y-%m-%d %H:%M:%S")
+
                 answer = {
                     "response": response,
                     "history": history,
@@ -63,9 +68,11 @@ async def create_item(request: Request):
                     "time": time
                 }
 
-                yield answer, history
+                yield json.dumps(answer)
 
-        return StreamingResponse(response(history), media_type="video/mp4")
+        return StreamingResponse(response(history), media_type="application/json")
+
+        torch_gc()
 
     else:
 
@@ -102,7 +109,7 @@ if __name__ == '__main__':
     #
     tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True)
 
-    model = AutoModel.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True).half().cuda()
+    model = AutoModel.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True).quantize(8).half().cuda()
 
     model.eval()
 
