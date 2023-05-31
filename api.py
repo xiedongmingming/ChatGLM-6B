@@ -102,7 +102,7 @@ async def create_item(request: Request):
 
         torch_gc()
 
-        return answer
+        return json.dumps(answer)
 
 
 if __name__ == '__main__':
