@@ -42,11 +42,11 @@ async def create_item(request: Request):
     max_length = json_post_list.get('max_length')
     top_p = json_post_list.get('top_p')
     temperature = json_post_list.get('temperature')
-    streaming = json_post_list.get('streaming')
+    stream = json_post_list.get('stream')
 
-    if streaming:
+    if stream:
 
-        def response(history):
+        def stream_chat(history):
 
             for response, history in model.stream_chat(
                     tokenizer,
@@ -57,9 +57,7 @@ async def create_item(request: Request):
                     temperature=temperature if temperature else 0.95
             ):
                 #
-                now = datetime.datetime.now()
-
-                time = now.strftime("%Y-%m-%d %H:%M:%S")
+                time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
                 answer = {
                     "response": response,
@@ -68,9 +66,13 @@ async def create_item(request: Request):
                     "time": time
                 }
 
+                log = "[" + time + "] " + '", prompt:"' + prompt + '", response:"' + repr(response) + '"'
+
+                print(log)
+
                 yield json.dumps(answer)
 
-        return StreamingResponse(response(history), media_type="application/json")
+        return StreamingResponse(stream_chat(history), media_type="application/json")
 
         torch_gc()
 
@@ -85,9 +87,7 @@ async def create_item(request: Request):
             temperature=temperature if temperature else 0.95
         )
 
-        now = datetime.datetime.now()
-
-        time = now.strftime("%Y-%m-%d %H:%M:%S")
+        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         answer = {
             "response": response,
