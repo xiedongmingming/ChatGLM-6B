@@ -91,7 +91,7 @@ def main():
 
     logger.info(f"Training/evaluation parameters {training_args}")
 
-    # Set seed before initializing model.
+    # Set seed before initializing chatglm-6b.
     set_seed(training_args.seed)
 
     # Load dataset
@@ -119,7 +119,7 @@ def main():
         use_auth_token=True if model_args.use_auth_token else None,
     )
 
-    # Load pretrained model and tokenizer
+    # Load pretrained chatglm-6b and tokenizer
     config = AutoConfig.from_pretrained(model_args.model_name_or_path, trust_remote_code=True)
 
     config.pre_seq_len = model_args.pre_seq_len

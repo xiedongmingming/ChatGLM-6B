@@ -203,7 +203,7 @@ Model quantization brings a certain performance decline. After testing, ChatGLM-
 
 The quantization costs about 13GB of CPU memory to load the FP16 model. If your CPU memory is limited, you can directly load the quantized model, which costs only 5.2GB CPU memory: 
 ```python
-# For INT8-quantized model, change "chatglm-6b-int4" to "chatglm-6b-int8"
+# For INT8-quantized chatglm-6b, change "chatglm-6b-int4" to "chatglm-6b-int8"
 model = AutoModel.from_pretrained("THUDM/chatglm-6b-int4", trust_remote_code=True).half().cuda()
 ```
 
@@ -217,7 +217,7 @@ model = AutoModel.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True).fl
 
 If your CPU memory is limited, you can directly load the quantized model:
 ```python
-# For INT8-quantized model, change "chatglm-6b-int4" to "chatglm-6b-int8"
+# For INT8-quantized chatglm-6b, change "chatglm-6b-int4" to "chatglm-6b-int8"
 model = AutoModel.from_pretrained("THUDM/chatglm-6b-int4", trust_remote_code=True).float()
 ```
 
@@ -234,7 +234,7 @@ model = AutoModel.from_pretrained("your local path", trust_remote_code=True).hal
 Loading a FP16 ChatGLM-6B model requires about 13GB of memory. Machines with less memory (such as a MacBook Pro with 16GB of memory) will use the virtual memory on the hard disk when there is insufficient free memory, resulting in a serious slowdown in inference speed. At this time, a quantized model such as chatglm-6b-int4 can be used. Because the quantized kernel on the GPU is written in CUDA, it cannot be used on MacOS, and can only be inferred using the CPU:
 
 ```python
-# For INT8-quantized model, change "chatglm-6b-int4" to "chatglm-6b-int8"
+# For INT8-quantized chatglm-6b, change "chatglm-6b-int4" to "chatglm-6b-int8"
 model = AutoModel.from_pretrained("THUDM/chatglm-6b-int4", trust_remote_code=True).float()
 ```
 

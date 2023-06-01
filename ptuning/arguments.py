@@ -6,12 +6,12 @@ from typing import Optional
 @dataclass
 class ModelArguments:
     """
-    Arguments pertaining to which model/config/tokenizer we are going to fine-tune from.
+    Arguments pertaining to which chatglm-6b/config/tokenizer we are going to fine-tune from.
     """
 
     model_name_or_path: str = field(
         metadata={
-            "help": "Path to pretrained model or model identifier from huggingface.co/models"
+            "help": "Path to pretrained chatglm-6b or chatglm-6b identifier from huggingface.co/models"
         }
     )
     ptuning_checkpoint: str = field(
@@ -47,7 +47,7 @@ class ModelArguments:
     model_revision: str = field(
         default="main",
         metadata={
-            "help": "The specific model version to use (can be a branch name, tag name or commit id)."
+            "help": "The specific chatglm-6b version to use (can be a branch name, tag name or commit id)."
         },
     )
     use_auth_token: bool = field(
@@ -64,7 +64,7 @@ class ModelArguments:
         metadata={
             "help": (
                 "Whether to automatically resize the position embeddings if `max_source_length` exceeds "
-                "the model's position embeddings."
+                "the chatglm-6b's position embeddings."
             )
         },
     )
@@ -82,7 +82,7 @@ class ModelArguments:
 @dataclass
 class DataTrainingArguments:
     """
-    Arguments pertaining to what data we are going to input our model for training and eval.
+    Arguments pertaining to what data we are going to input our chatglm-6b for training and eval.
     """
 
     lang: Optional[str] = field(
@@ -177,7 +177,7 @@ class DataTrainingArguments:
             "help": (
                 "The maximum total sequence length for validation target text after tokenization. Sequences longer "
                 "than this will be truncated, sequences shorter will be padded. Will default to `max_target_length`."
-                "This argument is also used to override the ``max_length`` param of ``model.generate``, which is used "
+                "This argument is also used to override the ``max_length`` param of ``chatglm-6b.generate``, which is used "
                 "during ``evaluate`` and ``predict``."
             )
         },
@@ -186,7 +186,7 @@ class DataTrainingArguments:
         default=False,
         metadata={
             "help": (
-                "Whether to pad all samples to model maximum sentence length. "
+                "Whether to pad all samples to chatglm-6b maximum sentence length. "
                 "If False, will pad the samples dynamically when batching to the maximum length in the batch. More "
                 "efficient on GPU but very bad for TPU."
             )
@@ -223,7 +223,7 @@ class DataTrainingArguments:
         default=None,
         metadata={
             "help": (
-                "Number of beams to use for evaluation. This argument will be passed to ``model.generate``, "
+                "Number of beams to use for evaluation. This argument will be passed to ``chatglm-6b.generate``, "
                 "which is used during ``evaluate`` and ``predict``."
             )
         },
