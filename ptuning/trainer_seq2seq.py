@@ -23,17 +23,16 @@ from trainer import Trainer
 from transformers.trainer_utils import PredictionOutput
 from transformers.utils import logging
 
-
 logger = logging.get_logger(__name__)
 
 
 class Seq2SeqTrainer(Trainer):
     def evaluate(
-        self,
-        eval_dataset: Optional[Dataset] = None,
-        ignore_keys: Optional[List[str]] = None,
-        metric_key_prefix: str = "eval",
-        **gen_kwargs
+            self,
+            eval_dataset: Optional[Dataset] = None,
+            ignore_keys: Optional[List[str]] = None,
+            metric_key_prefix: str = "eval",
+            **gen_kwargs
     ) -> Dict[str, float]:
         """
         Run evaluation and returns metrics.
@@ -78,11 +77,11 @@ class Seq2SeqTrainer(Trainer):
         return super().evaluate(eval_dataset, ignore_keys=ignore_keys, metric_key_prefix=metric_key_prefix)
 
     def predict(
-        self,
-        test_dataset: Dataset,
-        ignore_keys: Optional[List[str]] = None,
-        metric_key_prefix: str = "test",
-        **gen_kwargs
+            self,
+            test_dataset: Dataset,
+            ignore_keys: Optional[List[str]] = None,
+            metric_key_prefix: str = "test",
+            **gen_kwargs
     ) -> PredictionOutput:
         """
         Run prediction and returns predictions and potential metrics.
@@ -132,15 +131,14 @@ class Seq2SeqTrainer(Trainer):
         )
         self._gen_kwargs = gen_kwargs
 
-
         return super().predict(test_dataset, ignore_keys=ignore_keys, metric_key_prefix=metric_key_prefix)
 
     def prediction_step(
-        self,
-        model: nn.Module,
-        inputs: Dict[str, Union[torch.Tensor, Any]],
-        prediction_loss_only: bool,
-        ignore_keys: Optional[List[str]] = None,
+            self,
+            model: nn.Module,
+            inputs: Dict[str, Union[torch.Tensor, Any]],
+            prediction_loss_only: bool,
+            ignore_keys: Optional[List[str]] = None,
     ) -> Tuple[Optional[float], Optional[torch.Tensor], Optional[torch.Tensor]]:
         """
         Perform an evaluation step on `model` using `inputs`.
@@ -206,7 +204,7 @@ class Seq2SeqTrainer(Trainer):
         if gen_kwargs.get("max_length") is not None and generated_tokens.shape[-1] < gen_kwargs["max_length"]:
             generated_tokens = self._pad_tensors_to_max_len(generated_tokens, gen_kwargs["max_length"])
         elif gen_kwargs.get("max_new_tokens") is not None and generated_tokens.shape[-1] < (
-            gen_kwargs["max_new_tokens"] + 1
+                gen_kwargs["max_new_tokens"] + 1
         ):
             generated_tokens = self._pad_tensors_to_max_len(generated_tokens, gen_kwargs["max_new_tokens"] + 1)
 
@@ -220,7 +218,7 @@ class Seq2SeqTrainer(Trainer):
             if gen_kwargs.get("max_length") is not None and labels.shape[-1] < gen_kwargs["max_length"]:
                 labels = self._pad_tensors_to_max_len(labels, gen_kwargs["max_length"])
             elif gen_kwargs.get("max_new_tokens") is not None and labels.shape[-1] < (
-                gen_kwargs["max_new_tokens"] + 1
+                    gen_kwargs["max_new_tokens"] + 1
             ):
                 labels = self._pad_tensors_to_max_len(labels, (gen_kwargs["max_new_tokens"] + 1))
         else:

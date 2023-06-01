@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from typing import Optional
 
 
@@ -9,28 +10,45 @@ class ModelArguments:
     """
 
     model_name_or_path: str = field(
-        metadata={"help": "Path to pretrained model or model identifier from huggingface.co/models"}
+        metadata={
+            "help": "Path to pretrained model or model identifier from huggingface.co/models"
+        }
     )
     ptuning_checkpoint: str = field(
-        default=None, metadata={"help": "Path to p-tuning v2 checkpoints"}
+        default=None,
+        metadata={
+            "help": "Path to p-tuning v2 checkpoints"
+        }
     )
     config_name: Optional[str] = field(
-        default=None, metadata={"help": "Pretrained config name or path if not the same as model_name"}
+        default=None,
+        metadata={
+            "help": "Pretrained config name or path if not the same as model_name"
+        }
     )
     tokenizer_name: Optional[str] = field(
-        default=None, metadata={"help": "Pretrained tokenizer name or path if not the same as model_name"}
+        default=None,
+        metadata={
+            "help": "Pretrained tokenizer name or path if not the same as model_name"
+        }
     )
     cache_dir: Optional[str] = field(
         default=None,
-        metadata={"help": "Where to store the pretrained models downloaded from huggingface.co"},
+        metadata={
+            "help": "Where to store the pretrained models downloaded from huggingface.co"
+        },
     )
     use_fast_tokenizer: bool = field(
         default=True,
-        metadata={"help": "Whether to use one of the fast tokenizer (backed by the tokenizers library) or not."},
+        metadata={
+            "help": "Whether to use one of the fast tokenizer (backed by the tokenizers library) or not."
+        },
     )
     model_revision: str = field(
         default="main",
-        metadata={"help": "The specific model version to use (can be a branch name, tag name or commit id)."},
+        metadata={
+            "help": "The specific model version to use (can be a branch name, tag name or commit id)."
+        },
     )
     use_auth_token: bool = field(
         default=False,
@@ -67,28 +85,47 @@ class DataTrainingArguments:
     Arguments pertaining to what data we are going to input our model for training and eval.
     """
 
-    lang: Optional[str] = field(default=None, metadata={"help": "Language id for summarization."})
+    lang: Optional[str] = field(
+        default=None,
+        metadata={
+            "help": "Language id for summarization."
+        })
 
     dataset_name: Optional[str] = field(
-        default=None, metadata={"help": "The name of the dataset to use (via the datasets library)."}
+        default=None,
+        metadata={
+            "help": "The name of the dataset to use (via the datasets library)."
+        }
     )
     dataset_config_name: Optional[str] = field(
-        default=None, metadata={"help": "The configuration name of the dataset to use (via the datasets library)."}
+        default=None,
+        metadata={
+            "help": "The configuration name of the dataset to use (via the datasets library)."
+        }
     )
     prompt_column: Optional[str] = field(
         default=None,
-        metadata={"help": "The name of the column in the datasets containing the full texts (for summarization)."},
+        metadata={
+            "help": "The name of the column in the datasets containing the full texts (for summarization)."
+        },
     )
     response_column: Optional[str] = field(
         default=None,
-        metadata={"help": "The name of the column in the datasets containing the summaries (for summarization)."},
+        metadata={
+            "help": "The name of the column in the datasets containing the summaries (for summarization)."
+        },
     )
     history_column: Optional[str] = field(
         default=None,
-        metadata={"help": "The name of the column in the datasets containing the history of chat."},
+        metadata={
+            "help": "The name of the column in the datasets containing the history of chat."
+        },
     )
     train_file: Optional[str] = field(
-        default=None, metadata={"help": "The input training data file (a jsonlines or csv file)."}
+        default=None,
+        metadata={
+            "help": "The input training data file (a jsonlines or csv file)."
+        }
     )
     validation_file: Optional[str] = field(
         default=None,
@@ -105,11 +142,16 @@ class DataTrainingArguments:
         },
     )
     overwrite_cache: bool = field(
-        default=False, metadata={"help": "Overwrite the cached training and evaluation sets"}
+        default=False,
+        metadata={
+            "help": "Overwrite the cached training and evaluation sets"
+        }
     )
     preprocessing_num_workers: Optional[int] = field(
         default=None,
-        metadata={"help": "The number of processes to use for the preprocessing."},
+        metadata={
+            "help": "The number of processes to use for the preprocessing."
+        },
     )
     max_source_length: Optional[int] = field(
         default=1024,
@@ -193,7 +235,10 @@ class DataTrainingArguments:
         },
     )
     source_prefix: Optional[str] = field(
-        default="", metadata={"help": "A prefix to add before every source text (useful for T5 models)."}
+        default="",
+        metadata={
+            "help": "A prefix to add before every source text (useful for T5 models)."
+        }
     )
 
     forced_bos_token: Optional[str] = field(
@@ -207,18 +252,26 @@ class DataTrainingArguments:
         },
     )
 
-    
-
     def __post_init__(self):
-        if self.dataset_name is None and self.train_file is None and self.validation_file is None and self.test_file is None:
-            raise ValueError("Need either a dataset name or a training/validation/test file.")
-        else:
-            if self.train_file is not None:
-                extension = self.train_file.split(".")[-1]
-                assert extension in ["csv", "json"], "`train_file` should be a csv or a json file."
-            if self.validation_file is not None:
-                extension = self.validation_file.split(".")[-1]
-                assert extension in ["csv", "json"], "`validation_file` should be a csv or a json file."
-        if self.val_max_target_length is None:
-            self.val_max_target_length = self.max_target_length
 
+        if self.dataset_name is None and self.train_file is None and self.validation_file is None and self.test_file is None:
+
+            raise ValueError("Need either a dataset name or a training/validation/test file.")
+
+        else:
+
+            if self.train_file is not None:
+                #
+                extension = self.train_file.split(".")[-1]
+
+                assert extension in ["csv", "json"], "`train_file` should be a csv or a json file."
+
+            if self.validation_file is not None:
+                #
+                extension = self.validation_file.split(".")[-1]
+
+                assert extension in ["csv", "json"], "`validation_file` should be a csv or a json file."
+
+        if self.val_max_target_length is None:
+            #
+            self.val_max_target_length = self.max_target_length
