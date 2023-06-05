@@ -11,8 +11,8 @@ client = chromadb.Client(Settings(
 
 client.persist()
 
-# client.heartbeat() # returns a nanosecond heartbeat. Useful for making sure the client remains connected.
-# client.reset() # Empties and completely resets the database. ⚠️ This is destructive and not reversible.
+# client.heartbeat() # 返回纳秒级心跳。用于确保客户端保持连接。
+# client.reset() # 清空并完全重置数据库。这是破坏性的，不可逆转的。
 
 collection = client.create_collection(name="collection")  # 集合是存储嵌入、文档和任何其他元数据的地方
 
